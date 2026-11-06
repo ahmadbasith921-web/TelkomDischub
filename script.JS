@@ -1,14 +1,38 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================
-       0. FITUR AUTO SLIDER (HERO SECTION)
+       0. FITUR AUTO SLIDER & PREVIEW NEXT SLIDE
        ========================================= */
+    const heroSlider = document.getElementById('heroSlider');
     const slides = document.querySelectorAll('.slide');
     const dots = document.querySelectorAll('.slider-indicators .dot');
     let currentSlide = 0;
     let slideInterval;
 
-    // Fungsi untuk pindah ke slide berikutnya
+    // Fungsi update gambar & teks banner sebelah kanan 
+    function updateSidePreview() {
+        const nextIndex = (currentSlide + 1) % slides.length;
+        const nextSlide = slides[nextIndex];
+        const slideImg = nextSlide.querySelector('.slide-img');
+
+        // Ambil URL gambar dari slide berikutnya
+        const bgStyle = slideImg.style.backgroundImage;
+        const urlMatch = bgStyle.match(/url\(["']?(.*?)["']?\)/);
+
+        if (urlMatch && urlMatch[1]) {
+            const imgUrl = urlMatch[1];
+            const heroSide = document.querySelector('.hero-side');
+            heroSide.style.backgroundImage = `linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1)), url('${imgUrl}')`;
+        }
+
+        // Ambil teks hashtag dan judul dari slide berikutnya
+        const nextHashtag = nextSlide.querySelector('.hashtag').innerText;
+        const nextTitle = nextSlide.querySelector('.title-white').innerText;
+
+        document.querySelector('.hashtag-side').innerText = nextHashtag;
+        document.querySelector('.hero-side h2').innerText = nextTitle;
+    }
+
     function nextSlide() {
         slides[currentSlide].classList.remove('active');
         dots[currentSlide].classList.remove('active');
@@ -17,16 +41,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
         slides[currentSlide].classList.add('active');
         dots[currentSlide].classList.add('active');
+        updateSidePreview();
     }
 
-    // Mulai animasi otomatis setiap 6 detik
+    function prevSlide() {
+        slides[currentSlide].classList.remove('active');
+        dots[currentSlide].classList.remove('active');
+
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
+        updateSidePreview();
+    }
+
+    // Jalankan preview untuk pertama kali
+    updateSidePreview();
     slideInterval = setInterval(nextSlide, 6000);
 
-    // (Opsional) Mengizinkan dot diklik untuk pindah manual
     dots.forEach((dot, index) => {
         dot.addEventListener('click', () => {
-            clearInterval(slideInterval); // Hentikan auto-slide sebentar saat diklik manual
-
+            clearInterval(slideInterval);
             slides[currentSlide].classList.remove('active');
             dots[currentSlide].classList.remove('active');
 
@@ -34,10 +69,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
             slides[currentSlide].classList.add('active');
             dots[currentSlide].classList.add('active');
+            updateSidePreview();
 
-            slideInterval = setInterval(nextSlide, 6000); // Mulai lagi
+            slideInterval = setInterval(nextSlide, 6000);
         });
     });
+
+    // Fitur Swipe untuk Mobile
+    let startX = 0;
+    let endX = 0;
+
+    heroSlider.addEventListener('touchstart', (e) => {
+        startX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    heroSlider.addEventListener('touchend', (e) => {
+        endX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const threshold = 50;
+
+        if (startX - endX > threshold) {
+            clearInterval(slideInterval);
+            nextSlide();
+            slideInterval = setInterval(nextSlide, 6000);
+        } else if (endX - startX > threshold) {
+            clearInterval(slideInterval);
+            prevSlide();
+            slideInterval = setInterval(nextSlide, 6000);
+        }
+    }
 
 
     /* =========================================
@@ -70,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+
     /* =========================================
        2. FITUR FAQ (ACCORDION / COLLAPSE)
        ========================================= */
@@ -81,6 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
             answer.classList.toggle("show");
         });
     });
+
 
     /* =========================================
        3. VALIDASI FORM KONTAK
@@ -102,6 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Pesan berhasil dikirim!");
         contactForm.reset();
     });
+
 
     /* =========================================
        4. FITUR TO-DO LIST (LOCALSTORAGE)

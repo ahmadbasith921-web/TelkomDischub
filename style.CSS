@@ -22,6 +22,7 @@ body {
     background-color: var(--white);
     color: var(--dark-gray);
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 h1,
@@ -88,14 +89,14 @@ h2 {
     font-size: 1.4rem;
     color: var(--black);
     letter-spacing: -0.5px;
-    line-height: 0.75;
+    line-height: 1.1;
 }
 
 .logo-tagline {
     font-size: 0.75rem;
     color: #777;
     font-weight: 600;
-    margin-top: 1px;
+    margin-top: 2px;
     letter-spacing: 0.5px;
 }
 
@@ -232,6 +233,7 @@ h2 {
     border-radius: 28px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
     overflow: hidden;
+    touch-action: pan-y;
 }
 
 .slide {
@@ -251,10 +253,12 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    user-select: none;
 }
 
 .title-blue-zone {
     margin-bottom: 1rem;
+    pointer-events: none;
 }
 
 .hashtag {
@@ -272,14 +276,19 @@ h2 {
     font-family: 'Gotham Rounded', sans-serif;
 }
 
+/* KOTAK PUTIH (REVISI RED & YELLOW) */
 .slide-content-red-zone {
     background-color: var(--white);
-    width: 85%;
+    width: 100%;
+    /* Kotak penuh sampai tepi */
     margin-top: -60px;
-    padding: 2.5rem 3rem;
-    border-radius: 0 40px 0 0;
+    padding: 2.5rem 3rem 4.5rem;
+    /* Padding bawah ditambah biar nggak mepet */
+    border-radius: 0;
+    /* Lengkungan dihapus */
     position: relative;
     z-index: 2;
+    pointer-events: none;
 }
 
 .title-black {
@@ -295,6 +304,7 @@ h2 {
     justify-content: space-between;
     align-items: center;
     gap: 30px;
+    pointer-events: auto;
 }
 
 .desc-btn-row p {
@@ -354,6 +364,7 @@ h2 {
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 50%;
     transition: 0.3s;
+    cursor: pointer;
 }
 
 .dot.active {
@@ -362,15 +373,17 @@ h2 {
     border-radius: 20px;
 }
 
-/* Hero Kanan */
+/* Hero Kanan (Preview Image) */
 .hero-side {
     flex: 1;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80') center/cover;
+    background-position: center;
+    background-size: cover;
     border-radius: 28px;
     padding: 2.5rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    transition: background-image 0.5s ease-in-out;
 }
 
 .hashtag-side {
@@ -394,9 +407,7 @@ h2 {
     gap: 2rem;
 }
 
-/* ========================================= */
-/* CHEST OPENING CARD + GOOGLE MAPS (JADWAL) */
-/* ========================================= */
+/* Chest Opening Map */
 .chest-card {
     background: var(--white);
     border-radius: 24px;
@@ -417,7 +428,6 @@ h2 {
     font-size: 1.4rem;
 }
 
-/* Map tersembunyi dengan tinggi 0 */
 .chest-middle {
     max-height: 0;
     opacity: 0;
@@ -429,12 +439,10 @@ h2 {
 .chest-middle iframe {
     width: 100%;
     height: 180px;
-    /* Tinggi map saat terbuka */
     border: none;
     border-radius: 12px;
 }
 
-/* Info bagian bawah */
 .chest-bottom {
     transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
     margin-top: 1rem;
@@ -457,33 +465,26 @@ h2 {
     margin-bottom: 0.5rem;
 }
 
-/* Efek Hover (Chest Opening Mulus) */
 .chest-card:hover {
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
     transform: translateY(-5px);
 }
 
-/* Judul naik ke atas */
 .chest-card:hover .chest-top {
     transform: translateY(-10px);
 }
 
-/* Ruang Map Terbuka */
 .chest-card:hover .chest-middle {
     max-height: 200px;
     opacity: 1;
     margin: 1.5rem 0;
-    /* Memberi jarak antara Judul, Map, dan Info */
 }
 
-/* Info turun ke bawah */
 .chest-card:hover .chest-bottom {
     transform: translateY(10px);
 }
 
-/* ========================================= */
-/* STANDARD ROUNDED CARD (ORGANISASI)        */
-/* ========================================= */
+/* Card Normal */
 .card {
     background: var(--white);
     border: none;
@@ -518,7 +519,7 @@ h2 {
     color: #555;
 }
 
-/* To-Do List Rounded */
+/* To-Do List */
 .todo-container {
     max-width: 650px;
     margin: 0 auto;
@@ -610,7 +611,7 @@ h2 {
     accent-color: var(--primary-red);
 }
 
-/* FAQ Rounded */
+/* FAQ */
 .faq-container {
     max-width: 800px;
     margin: 0 auto;
@@ -657,7 +658,7 @@ h2 {
     max-height: 300px;
 }
 
-/* Contact Form Rounded */
+/* Contact Form */
 .form-container {
     max-width: 600px;
     margin: 0 auto;
@@ -722,7 +723,7 @@ footer {
     margin-top: 4rem;
 }
 
-/* Responsive Mobile */
+/* RESPONSIVE MOBILE */
 @media (max-width: 1024px) {
     .hero-container {
         flex-direction: column;
@@ -730,18 +731,18 @@ footer {
     }
 
     .hero-main {
-        height: 550px;
+        height: 480px;
     }
 
     .hero-side {
-        height: 350px;
+        height: 320px;
     }
 
     .slide-content-red-zone {
         width: 100%;
-        margin-top: -30px;
-        border-radius: 30px 30px 0 0;
-        padding: 2rem;
+        margin-top: -40px;
+        border-radius: 0;
+        padding: 2.5rem 2rem 4rem;
     }
 
     .desc-btn-row {
@@ -757,6 +758,67 @@ footer {
 }
 
 @media (max-width: 900px) {
+    .hero-section {
+        margin: 1rem auto;
+        padding: 0 1rem;
+    }
+
+    .hero-main {
+        height: 430px;
+        border-radius: 20px;
+    }
+
+    .slide-img {
+        height: 260px;
+        padding: 2rem;
+    }
+
+    .title-white {
+        font-size: 2.2rem;
+    }
+
+    .title-black {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .slide-content-red-zone {
+        margin-top: -30px;
+        padding: 1.5rem 1.5rem 3rem;
+    }
+
+    .desc-btn-row p {
+        font-size: 0.95rem;
+    }
+
+    .cta-btn {
+        padding: 0.8rem 1.8rem;
+        font-size: 0.95rem;
+    }
+
+    .section {
+        padding: 3rem 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1.8rem;
+    }
+
+    .faq-question {
+        padding: 1rem 1.2rem;
+        font-size: 1rem;
+    }
+
+    .faq-question:hover {
+        padding-left: 1.2rem;
+    }
+
+    .faq-answer p {
+        padding: 0 1.2rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
     .hamburger {
         display: flex;
     }
