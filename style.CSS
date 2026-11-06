@@ -223,9 +223,10 @@ h2 {
 .hero-container {
     display: flex;
     gap: 20px;
-    height: 500px;
+    height: auto;
 }
 
+/* KOTAK SLIDER DIBUAT GRID AGAR BISA CROSSFADE TANPA MERUSAK UKURAN */
 .hero-main {
     flex: 2.2;
     position: relative;
@@ -234,19 +235,28 @@ h2 {
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     touch-action: pan-y;
+    display: grid;
+    /* Menumpuk slide di satu tempat */
 }
 
+/* ANIMASI TRANSISI FADE-IN FADE-OUT */
 .slide {
-    display: none;
+    grid-area: 1 / 1;
     height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
 }
 
 .slide.active {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
 }
 
 .slide-img {
-    height: 340px;
+    min-height: 340px;
+    height: 100%;
     background-size: cover;
     background-position: center;
     padding: 3rem;
@@ -276,16 +286,12 @@ h2 {
     font-family: 'Gotham Rounded', sans-serif;
 }
 
-/* KOTAK PUTIH (REVISI RED & YELLOW) */
 .slide-content-red-zone {
     background-color: var(--white);
     width: 100%;
-    /* Kotak penuh sampai tepi */
     margin-top: -60px;
-    padding: 2.5rem 3rem 4.5rem;
-    /* Padding bawah ditambah biar nggak mepet */
+    padding: 2.5rem 3rem 3rem;
     border-radius: 0;
-    /* Lengkungan dihapus */
     position: relative;
     z-index: 2;
     pointer-events: none;
@@ -376,6 +382,7 @@ h2 {
 /* Hero Kanan (Preview Image) */
 .hero-side {
     flex: 1;
+    min-height: 500px;
     background-position: center;
     background-size: cover;
     border-radius: 28px;
@@ -504,10 +511,11 @@ h2 {
     font-size: 1.4rem;
 }
 
+/* WARNA FONT BADGE DIPAKSA PUTIH */
 .badge {
     display: inline-block;
     background: var(--dark-gray);
-    color: var(--white);
+    color: #FFFFFF !important;
     padding: 0.4rem 1rem;
     border-radius: 50px;
     font-size: 0.85rem;
@@ -723,26 +731,20 @@ footer {
     margin-top: 4rem;
 }
 
-/* RESPONSIVE MOBILE */
+/* RESPONSIVE MOBILE - FIX POTONGAN TOMBOL BAWAH */
 @media (max-width: 1024px) {
     .hero-container {
         flex-direction: column;
         height: auto;
     }
 
-    .hero-main {
-        height: 480px;
-    }
-
     .hero-side {
-        height: 320px;
+        min-height: 320px;
     }
 
     .slide-content-red-zone {
-        width: 100%;
         margin-top: -40px;
-        border-radius: 0;
-        padding: 2.5rem 2rem 4rem;
+        padding: 2.5rem 2rem 3rem;
     }
 
     .desc-btn-row {
@@ -764,12 +766,11 @@ footer {
     }
 
     .hero-main {
-        height: 430px;
         border-radius: 20px;
     }
 
     .slide-img {
-        height: 260px;
+        min-height: 260px;
         padding: 2rem;
     }
 
@@ -782,6 +783,7 @@ footer {
         margin-bottom: 0.5rem;
     }
 
+    /* Ruang tambahan di bawah agar tombol "Jelajahi" tidak nabrak dinding */
     .slide-content-red-zone {
         margin-top: -30px;
         padding: 1.5rem 1.5rem 3rem;
