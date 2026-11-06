@@ -223,10 +223,12 @@ h2 {
 .hero-container {
     display: flex;
     gap: 20px;
-    height: auto;
+    align-items: stretch;
 }
 
-/* KOTAK SLIDER DIBUAT GRID AGAR BISA CROSSFADE TANPA MERUSAK UKURAN */
+/* Diubah stretch biar kotak kanan sama tinggi */
+
+/* Perbaikan Ketinggian & Grid */
 .hero-main {
     flex: 2.2;
     position: relative;
@@ -236,16 +238,16 @@ h2 {
     overflow: hidden;
     touch-action: pan-y;
     display: grid;
-    /* Menumpuk slide di satu tempat */
+    /* Grid tumpuk */
 }
 
-/* ANIMASI TRANSISI FADE-IN FADE-OUT */
 .slide {
     grid-area: 1 / 1;
-    height: 100%;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
+    display: flex;
+    flex-direction: column;
 }
 
 .slide.active {
@@ -255,8 +257,8 @@ h2 {
 }
 
 .slide-img {
-    min-height: 340px;
-    height: 100%;
+    height: 380px;
+    /* Fix potong: Tinggi gambar dikunci, bukan 100% */
     background-size: cover;
     background-position: center;
     padding: 3rem;
@@ -290,11 +292,13 @@ h2 {
     background-color: var(--white);
     width: 100%;
     margin-top: -60px;
+    /* Narik kotak ke atas */
     padding: 2.5rem 3rem 3rem;
-    border-radius: 0;
     position: relative;
     z-index: 2;
     pointer-events: none;
+    flex-grow: 1;
+    /* Biar ngisi sisa ruang */
 }
 
 .title-black {
@@ -379,10 +383,9 @@ h2 {
     border-radius: 20px;
 }
 
-/* Hero Kanan (Preview Image) */
+/* Hero Kanan (Preview Image) + Animasi Baru */
 .hero-side {
     flex: 1;
-    min-height: 500px;
     background-position: center;
     background-size: cover;
     border-radius: 28px;
@@ -390,7 +393,14 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    transition: background-image 0.5s ease-in-out;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    /* Transisi Fade */
+}
+
+/* Class ini dipakai JS buat efek kedip transisi */
+.hero-side.animating {
+    opacity: 0;
+    transform: scale(0.95);
 }
 
 .hashtag-side {
@@ -511,7 +521,6 @@ h2 {
     font-size: 1.4rem;
 }
 
-/* WARNA FONT BADGE DIPAKSA PUTIH */
 .badge {
     display: inline-block;
     background: var(--dark-gray);
@@ -731,20 +740,23 @@ footer {
     margin-top: 4rem;
 }
 
-/* RESPONSIVE MOBILE - FIX POTONGAN TOMBOL BAWAH */
+/* RESPONSIVE MOBILE */
 @media (max-width: 1024px) {
     .hero-container {
         flex-direction: column;
-        height: auto;
     }
 
     .hero-side {
         min-height: 320px;
     }
 
+    .slide-img {
+        height: 320px;
+    }
+
     .slide-content-red-zone {
         margin-top: -40px;
-        padding: 2.5rem 2rem 3rem;
+        padding: 2.5rem 2rem 3.5rem;
     }
 
     .desc-btn-row {
@@ -770,7 +782,7 @@ footer {
     }
 
     .slide-img {
-        min-height: 260px;
+        height: 260px;
         padding: 2rem;
     }
 
@@ -783,10 +795,9 @@ footer {
         margin-bottom: 0.5rem;
     }
 
-    /* Ruang tambahan di bawah agar tombol "Jelajahi" tidak nabrak dinding */
     .slide-content-red-zone {
         margin-top: -30px;
-        padding: 1.5rem 1.5rem 3rem;
+        padding: 1.5rem 1.5rem 2.5rem;
     }
 
     .desc-btn-row p {

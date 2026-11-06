@@ -9,28 +9,33 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentSlide = 0;
     let slideInterval;
 
-    // Fungsi update gambar & teks banner sebelah kanan 
     function updateSidePreview() {
         const nextIndex = (currentSlide + 1) % slides.length;
         const nextSlide = slides[nextIndex];
         const slideImg = nextSlide.querySelector('.slide-img');
 
-        // Ambil URL gambar dari slide berikutnya
+        // Ambil URL gambar dan teks dari slide berikutnya
         const bgStyle = slideImg.style.backgroundImage;
         const urlMatch = bgStyle.match(/url\(["']?(.*?)["']?\)/);
-
-        if (urlMatch && urlMatch[1]) {
-            const imgUrl = urlMatch[1];
-            const heroSide = document.querySelector('.hero-side');
-            heroSide.style.backgroundImage = `linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1)), url('${imgUrl}')`;
-        }
-
-        // Ambil teks hashtag dan judul dari slide berikutnya
         const nextHashtag = nextSlide.querySelector('.hashtag').innerText;
         const nextTitle = nextSlide.querySelector('.title-white').innerText;
 
-        document.querySelector('.hashtag-side').innerText = nextHashtag;
-        document.querySelector('.hero-side h2').innerText = nextTitle;
+        const heroSide = document.querySelector('.hero-side');
+
+        // 1. Tambah class animasi biar gambar mengecil & memudar
+        heroSide.classList.add('animating');
+
+        // 2. Tunggu 300ms (sesuai CSS) buat ganti isi saat sedang pudar
+        setTimeout(() => {
+            if (urlMatch && urlMatch[1]) {
+                heroSide.style.backgroundImage = `linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1)), url('${urlMatch[1]}')`;
+            }
+            document.querySelector('.hashtag-side').innerText = nextHashtag;
+            document.querySelector('.hero-side h2').innerText = nextTitle;
+
+            // 3. Hapus class animasi biar gambar muncul lagi dengan mulus
+            heroSide.classList.remove('animating');
+        }, 300);
     }
 
     function nextSlide() {
